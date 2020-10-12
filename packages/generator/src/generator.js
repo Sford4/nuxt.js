@@ -45,6 +45,7 @@ export default class Generator {
     const routes = await this.initRoutes()
 
     consola.info('Generating pages' + (this.isFullStatic ? ' with full static mode' : ''))
+    console.log('generator 48', {routes})
     const errors = await this.generateRoutes(routes)
 
     await this.afterGenerate()
@@ -155,16 +156,17 @@ export default class Generator {
       // Add routes to the tracked generated routes (for crawler)
       this.generatedRoutes.add(route)
     })
-
+    console.log('Routes generator 158', this.routes)
     // Start generate process
     while (this.routes.length) {
       let n = 0
+      
       await Promise.all(
         this.routes
           .splice(0, this.options.generate.concurrency)
-          .map(async ({ route, payload }) => {
+          .map(async ({ route, payload, head }) => {
             await waitFor(n++ * this.options.generate.interval)
-            await this.generateRoute({ route, payload, errors })
+            await this.generateRoute({ route, payload, head, errors })
           })
       )
     }
@@ -259,21 +261,22 @@ export default class Generator {
     const routeMap = {}
     // Fill routeMap for known routes
     routes.forEach((route) => {
-      routeMap[route] = { route, payload: null }
+      routeMap[route] = { route, payload: null, head: null }
     })
     // Fill routeMap with given generate.routes
     generateRoutes.forEach((route) => {
-      // route is either a string or like { route : '/my_route/1', payload: {} }
+      // route is either a string or like { route : '/my_route/1', payload: {}, head: {} }
       const path = isString(route) ? route : route.route
       routeMap[path] = {
         route: path,
-        payload: route.payload || null
+        payload: route.payload || null,
+        head: route.head || null,
       }
     })
     return Object.values(routeMap)
   }
 
-  async generateRoute ({ route, payload = {}, errors = [] }) {
+  async generateRoute ({ route, payload = {}, head = {}, errors = [] }) {
     let html
     const pageErrors = []
 
@@ -288,10 +291,11 @@ export default class Generator {
 
     await this.nuxt.callHook('generate:route', { route, setPayload })
     await this.nuxt.callHook('export:route', { route, setPayload })
-
+    console.log('HEAD generator 293', {head})
     try {
       const renderContext = {
         payload,
+        head,
         staticAssetsBase: this.staticAssetsBase
       }
       const res = await this.nuxt.server.renderRoute(route, renderContext)

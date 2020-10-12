@@ -22,7 +22,7 @@
     "lint": "eslint --ext .js,.mjs,.vue .",
     "lint:app": "eslint-multiplexer eslint --ignore-path packages/vue-app/template/.eslintignore 'test/fixtures/!(missing-plugin)/.nuxt!(-dev)/**' | eslint-multiplexer -b",
     "ls-lint": "npx @ls-lint/ls-lint",
-    "nuxt": "node -r esm ./packages/cli/bin/nuxt-cli.js",
+    "nuxt": "node -r esm ./packages/cli/bin/nuxt-cli.js --port 7000",
     "pkg": "node -r esm ./scripts/package",
     "test": "yarn test:fixtures && yarn test:dev && yarn test:unit && test:types",
     "test:dev": "jest test/dev --forceExit",

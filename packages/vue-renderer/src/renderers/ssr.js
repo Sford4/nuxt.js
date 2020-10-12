@@ -117,12 +117,20 @@ export default class SSRRenderer extends BaseRenderer {
 
     let HEAD = ''
 
+    if(renderContext.head) {
+      console.log('RENDERING', { renderContext })
+    }
+    
     // Inject head meta
     // (this is unset when features.meta is false in server template)
     const meta = renderContext.meta && renderContext.meta.inject({
       isSSR: renderContext.nuxt.serverRendered,
       ln: this.options.dev
     })
+
+    if(renderContext.head) {
+      console.log('RENDERING', { meta })
+    }
 
     if (meta) {
       HEAD += meta.title.text() + meta.meta.text()
