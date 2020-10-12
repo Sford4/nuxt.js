@@ -156,11 +156,9 @@ export default class Generator {
       // Add routes to the tracked generated routes (for crawler)
       this.generatedRoutes.add(route)
     })
-    console.log('Routes generator 158', this.routes)
     // Start generate process
     while (this.routes.length) {
       let n = 0
-      
       await Promise.all(
         this.routes
           .splice(0, this.options.generate.concurrency)
@@ -270,7 +268,7 @@ export default class Generator {
       routeMap[path] = {
         route: path,
         payload: route.payload || null,
-        head: route.head || null,
+        head: route.head || null
       }
     })
     return Object.values(routeMap)
@@ -291,7 +289,7 @@ export default class Generator {
 
     await this.nuxt.callHook('generate:route', { route, setPayload })
     await this.nuxt.callHook('export:route', { route, setPayload })
-    console.log('HEAD generator 293', {head})
+    
     try {
       const renderContext = {
         payload,
