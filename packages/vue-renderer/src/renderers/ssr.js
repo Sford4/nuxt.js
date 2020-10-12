@@ -133,6 +133,7 @@ export default class SSRRenderer extends BaseRenderer {
     }
 
     if (meta) {
+      
       HEAD += meta.title.text() + meta.meta.text()
     }
 
