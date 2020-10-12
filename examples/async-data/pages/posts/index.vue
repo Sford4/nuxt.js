@@ -22,14 +22,14 @@
 
 <script>
 export default {
-  asyncData ({ req, params }) {
-    // We can return a Promise instead of calling the callback
-    return fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(res => res.json())
-      .then((data) => {
-        return { posts: data.slice(0, 5) }
-      })
-  },
+  // asyncData ({ req, params }) {
+  //   // We can return a Promise instead of calling the callback
+  //   return fetch('https://jsonplaceholder.typicode.com/posts')
+  //     .then(res => res.json())
+  //     .then((data) => {
+  //       return { posts: data.slice(0, 5) }
+  //     })
+  // },
   head: {
     title: 'List of posts'
   }
